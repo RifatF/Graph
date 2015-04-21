@@ -13,9 +13,9 @@ class VertexComporator implements Comparator<Vertex> {
     @Override
     public int compare(Vertex o1, Vertex o2) {
         int o1Size = o1.getLinkedVertices().size();
+        int o2Size = o2.getLinkedVertices().size();
         int o1Color = o1.getColor();
         int o2Color = o2.getColor();
-        int o2Size = o2.getLinkedVertices().size();
         if (o1Size == o2Size && (o1Color == o2Color || o1Color != 0 && o2Color != 0))
             return 0;
         else if ((o1Color == 0 && o2Color != 0) || (!(o1Color != 0 && o2Color == 0) && o1Size > o2Size))
@@ -30,6 +30,21 @@ public class Graph {
 
     public Graph(ArrayList<Vertex> vertices) {
         this.vertices = vertices;
+    }
+
+    public Graph(int[][] matrix) {
+        int numberOfVertices = matrix.length;
+        for (int i = 0; i < numberOfVertices; i++) {
+            this.vertices.add(new Vertex(i + 1));
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < i + 1; j++) {
+                if (matrix[i][j] == 1) {
+                    this.vertices.get(i).getLinkedVertices().add(this.vertices.get(j));
+                    this.vertices.get(j).getLinkedVertices().add(this.vertices.get(i));
+                }
+            }
+        }
     }
 
     public ArrayList<Vertex> getVertices() {

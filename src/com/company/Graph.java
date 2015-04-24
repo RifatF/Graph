@@ -65,31 +65,28 @@ public class Graph {
     }
 
     public int color() {
-        boolean flag = false;
-        boolean flag2 = false;
         int color = 0;
-        while (!flag) {
-            this.sort();
-            color++;
-            for (Vertex vertex : this.vertices) {
-                flag2 = false;
-                if (vertex.getColor() != 0) {
-                    if (this.vertices.get(0).equals(vertex)) {
-                        flag = true;
-                    }
-                    break;
-                }
-                for (Vertex vertex1 : vertex.getLinkedVertices()) {
-                    if (vertex1.getColor() == color) {
-                        flag2 = true;
-                        break;
-                    }
-                }
-                if (!flag2)
-                    vertex.setColor(color);
-            }
+        this.sort();
+        for (Vertex vertex : this.vertices) {
+            int newColor = findColor(vertex);
+            if (newColor > color)
+                color = newColor;
+            vertex.setColor(newColor);
         }
         return color;
+    }
+
+    public static int findColor(Vertex vertex) {
+        int color = 1;
+        while(true) {
+            for (Vertex linkedVertex : vertex.getLinkedVertices()) {
+                if (linkedVertex.getColor() == color) {
+                    color++;
+                    continue;
+                }
+            }
+            return color;
+        }
     }
 
     @Override
